@@ -1,0 +1,99 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateDeviceDto {
+  name: String!
+  serialNumber: String!
+  type: String!
+  userEmail: String!
+}
+
+input CreateUserDeviceDto {
+  deviceId: Int!
+  ownerEndDate: DateTime
+  ownerStartDate: DateTime!
+  userId: Int!
+}
+
+input CreateUserDto {
+  email: String!
+  fullname: String!
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Device {
+  createdAt: DateTime
+  deletedAt: DateTime
+  id: ID!
+  name: String!
+  serialNumber: String!
+  type: String
+  updatedAt: DateTime
+  users: [User!]!
+}
+
+type Mutation {
+  assignUserDevice(input: CreateUserDeviceDto!): UserDevice!
+  createDevice(input: CreateDeviceDto!): Device!
+  createUser(input: CreateUserDto!): User!
+  createUserDevice(input: CreateUserDeviceDto!): UserDevice!
+  deleteDevice(force: Boolean! = false, id: Int!): Boolean!
+  deleteUser(force: Boolean! = false, id: Int!): Boolean!
+  deleteUserDevice(force: Boolean! = false, id: Int!): Boolean!
+  restoreDevice(id: Int!): Device!
+  restoreUser(id: Int!): User!
+  restoreUserDevice(id: Int!): UserDevice!
+  terminateUserDeviceAssignment(deviceId: Int!): UserDevice!
+  updateDevice(id: Int!, input: UpdateDeviceDto!): Device!
+  updateUser(id: Int!, input: UpdateUserDto!): User!
+  updateUserCredentials(id: Float!, input: UpdateUserCredDto!): User!
+  updateUserDevice(id: Int!, input: CreateUserDeviceDto!): UserDevice!
+}
+
+type Query {
+  getAllDevices: [Device!]!
+  getAllUserDevices: [UserDevice!]!
+  getAllUsers: [User!]!
+  getDeviceByField(fieldname: String!, fieldvalue: String!): Device!
+  getDeviceById(id: Int!): Device!
+  getUserByField(fieldname: String!, fieldvalue: String!): User!
+  getUserById(id: Int!): User!
+  getUserDeviceByField(fieldname: String!, fieldvalue: String!): UserDevice!
+  getUserDeviceById(id: Int!): UserDevice!
+}
+
+input UpdateDeviceDto {
+  name: String!
+}
+
+input UpdateUserCredDto {
+  email: String
+  password: String
+}
+
+input UpdateUserDto {
+  fullname: String
+}
+
+type User {
+  createdAt: DateTime
+  deletedAt: DateTime
+  devices: [Device!]!
+  email: String!
+  fullname: String!
+  id: ID!
+  updatedAt: DateTime
+}
+
+type UserDevice {
+  deviceId: Int!
+  ownerEndDate: DateTime
+  ownerStartDate: DateTime!
+  userId: Int!
+}

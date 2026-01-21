@@ -8,11 +8,12 @@ import { DeviceController } from './Device.controller';
 import { User } from '../user/User';
 import { UserRepository } from '../user/User.repository';
 import { UserDeviceRepository } from '../user-device/UserDevice.repository';
+import { DeviceResolver } from './Device.resolver';
 
 @Module({
     imports: [SequelizeModule.forFeature([Device, User, UserDevice])],
-    providers: [DeviceService, DeviceRepository, UserRepository, UserDeviceRepository],
+    providers: [DeviceService, DeviceRepository, UserRepository, UserDeviceRepository, DeviceResolver],
     controllers: [DeviceController],
-    exports: [DeviceService],
+    exports: [DeviceService, DeviceRepository],
 })
 export class DeviceModule {}

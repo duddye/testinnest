@@ -7,9 +7,19 @@ import { User } from './modules/user/User';
 import { DeviceModule } from './modules/device/Device.module';
 import { Device } from './modules/device/Device';
 import { UserDevice } from './modules/user-device/UserDevice';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
+import { UserDeviceModule } from './modules/user-device/UserDevice.module';
 
 @Module({
   imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+      playground: true,  // interfaccia testing query
+    }), 
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: 'localhost',
@@ -18,7 +28,7 @@ import { UserDevice } from './modules/user-device/UserDevice';
       password: '12345',
       database: 'trainingdb',
 
-      models: [User, Device, UserDevice],
+      models: [User, Device, UserDevice], // con autoloadModels true non serve in realtà
       autoLoadModels: true,
       logging: console.log,
       define: {
@@ -27,7 +37,7 @@ import { UserDevice } from './modules/user-device/UserDevice';
       },
     }),
 
-    UserModule, DeviceModule
+    UserModule, DeviceModule, UserDeviceModule
   ],
   controllers: [AppController],
   providers: [AppService],

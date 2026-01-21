@@ -29,10 +29,6 @@ export class UserRepository extends BaseRepository<User> {
         return this.userModel.findByPk(id, { include: [{ model: Device}]});
     }
 
-    async getByEmail(email: string): Promise<User | null> {
-        return this.userModel.findOne({where: {email: email}});
-    }
-
     async updateCred(id: number, credDto: UpdateUserCredDto): Promise<User | null> {
         const updateData: any = {};
         if (credDto.email) updateData.email = credDto.email.toLowerCase();

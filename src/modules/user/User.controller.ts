@@ -16,9 +16,4 @@ export class UserController extends BaseController<User, CreateUserDto, UpdateUs
     async updateUserCred(@Param('id') id: number, @Body() userDto: UpdateUserCredDto): Promise<User | null> {
         return this.userService.updateUserCred(id, userDto);
     }
-
-    @Get('/email/:email')
-    async getByEmail(@Body() email: string): Promise<User | null> {
-        return this.userService.getByEmail(email);
-    }
 }

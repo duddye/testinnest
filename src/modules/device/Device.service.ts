@@ -18,14 +18,18 @@ export class DeviceService extends BaseService<Device> {
     ) {
         super(deviceRepository);
     }
+
     async create(deviceDto: CreateDeviceDto): Promise<Device> {
         const transaction: Transaction = await this.sequelize.transaction();
         try {
-            const user = await this.userRepository.getByEmail(deviceDto.userEmail);
+            //const user = await this.userRepository.getByEmail(deviceDto.userEmail);
+            const user = await this.userRepository.getByField('email', deviceDto.userEmail) as any;
             if (!user) throw new NotFoundException(`User with email ${deviceDto.userEmail} not found. Device creation aborted`);
             
-            if (await this.deviceRepository.getBySerialNumber(deviceDto.serialNumber)) throw new Error('Device already exists!'); 
-
+            //if (await this.deviceRepository.getBySerialNumber(deviceDto.serialNumber)) throw new Error('Device already exists!'); 
+            if (await this.deviceRepository.getByField('serialNumber', deviceDto.serialNumber)) {
+                throw new BadRequestException(`Device with serial number ${deviceDto.serialNumber} already exists!`);
+            }
             const newDevice = await this.deviceRepository.create(deviceDto, { transaction });
             
             if (newDevice) {
@@ -45,23 +49,4 @@ export class DeviceService extends BaseService<Device> {
         }
     }
     
-    async getByName(name: string): Promise<Device[]> {
-        const devices = await this.deviceRepository.getByName(name);
-        if (!devices || devices.length === 0) {
-        throw new NotFoundException('No Device found');
-        }
-        return devices;
-    }
-
-    async getByType(type: string): Promise<Device[]> {
-        const devices = await this.deviceRepository.getByType(type);
-        if (!devices || devices.length === 0) throw new NotFoundException('No Device found');
-        return devices;
-    }
-
-    async getBySerialNumber(serialNumber: string): Promise<Device> {
-        const device = await this.deviceRepository.getBySerialNumber(serialNumber);
-        if (!device) throw new NotFoundException('No Device found');
-        return device;
-    }
 }

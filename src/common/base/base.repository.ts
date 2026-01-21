@@ -1,15 +1,22 @@
 import { Model, ModelCtor } from 'sequelize-typescript';
-import { Attributes, CreateOptions, CreationAttributes } from 'sequelize';
+import { Attributes, CreateOptions } from 'sequelize';
 
 export abstract class BaseRepository<T extends Model> {
   constructor(protected readonly model: ModelCtor<T>) {}
 
   async getAll(): Promise<T[]> {
-      return this.model.findAll();
+    return this.model.findAll();
   }
   async getById(id: number): Promise<T | null> {
     return this.model.findByPk(id);
   }
+
+  async getByField(fieldname: string, fieldvalue: string): Promise<T | T[] | null> {
+    const whereClause: any = {};
+    whereClause[fieldname] = fieldvalue;
+    return this.model.findOne({ where: whereClause });
+  }
+
   async count(): Promise<number> {
     return this.model.count();
   }

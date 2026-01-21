@@ -10,14 +10,4 @@ export class DeviceController extends BaseController<Device, CreateDeviceDto, Up
     constructor(private readonly deviceService: DeviceService) {
         super(deviceService);
     }
-
-    @Get('serialnumber/:sn')  // GENERALIZZARE PER CAMPI 
-    async getBySerial(@Body() serial: string): Promise<Device | null> {
-        return this.deviceService.getBySerialNumber(serial);
-    }
-
-    @Get('type/:type')
-    async getByType(@Body() type: string): Promise<Device[]> {
-        return this.deviceService.getByType(type);
-    }
 }

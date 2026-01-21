@@ -31,11 +31,14 @@ export class UserDeviceRepository extends BaseRepository<UserDevice> {
         });
     }
 
-    async closeAssignment(id: number, endDate: Date): Promise<UserDevice | null> {
-        return this.update(id, { ownerEndDate: endDate });
+    async closeAssignment(userId: number, deviceId: number, endDate: Date): Promise<UserDevice | null> {
+        const assignment = await this.userDeviceModel.findOne({ where: { userId, deviceId } });
+        if (!assignment) return null;
+
+        return assignment.update({ ownerEndDate: endDate }, {hooks: false});
     }
 
-    async assign(dto: CreateUserDeviceDto, options?: CreateOptions): Promise<UserDevice> {
-        return this.create(dto, options);
+    async assign(dto: CreateUserDeviceDto): Promise<UserDevice | null> {
+        return this.create(dto);
     }
 }

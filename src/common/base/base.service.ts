@@ -16,6 +16,9 @@ export abstract class BaseService<T extends Model> {
         return entity;
     }
 
+    async getByField(fieldname: string, fieldvalue: string): Promise<T | T[] | null> {
+        return this.repository.getByField(fieldname, fieldvalue);
+    }
     async create(dto: any): Promise<T> {
         return this.repository.create(dto);
     }
@@ -26,8 +29,8 @@ export abstract class BaseService<T extends Model> {
         return updated;
     }
 
-    async deleteById(id: number, force = false): Promise<boolean> {
-        const deleted = await this.repository.delete(id, force);
+    async deleteById(id: number, force: boolean): Promise<boolean> {
+        const deleted = await this.repository.delete(id, force? force : false);
         if (!deleted) throw new NotFoundException(`Cannot Delete: Record with id ${id} not found`);
         return true;
     }

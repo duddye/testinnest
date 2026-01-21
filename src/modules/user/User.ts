@@ -3,6 +3,7 @@ import { AllowNull, BelongsToMany, Column, DataType, Table, Unique } from 'seque
 import { BaseAttributes, BaseCreationAttributes, BaseModel } from 'src/common/base/base.models';
 import { Device } from '../device/Device';
 import { UserDevice } from '../user-device/UserDevice';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 export interface UserAttributes extends BaseAttributes {
   email: string;
@@ -10,24 +11,26 @@ export interface UserAttributes extends BaseAttributes {
   fullname: string;
 }
 
-export type UserCreationAttributes = BaseCreationAttributes<UserAttributes>;
-
-
-@Table({tableName: 'users',  timestamps: true, paranoid: true})
-export class User extends BaseModel<UserAttributes, UserCreationAttributes> {
+@ObjectType()
+@Table({ tableName: 'users',  timestamps: true, paranoid: true, underscored: true })
+export class User extends BaseModel<UserAttributes, BaseCreationAttributes<UserAttributes>> {
+  @Field()
   @Unique
   @AllowNull(false)
   @Column(DataType.STRING)
   declare email: string;
 
+  // No field per motivi di sicurezza. Gestito solo lato server, penso
   @AllowNull(false)
   @Column(DataType.STRING)
   declare password: string;
 
+  @Field()
   @AllowNull(false)
   @Column(DataType.STRING)
-  fullname: string;
+  declare fullname: string;
 
+  @Field(() => [Device])
   @BelongsToMany(() => Device, () => UserDevice)
   declare devices: Device[];
 }

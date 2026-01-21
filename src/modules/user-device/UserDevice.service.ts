@@ -14,7 +14,7 @@ export class UserDeviceService extends BaseService<UserDevice> {
         super(userDeviceRepository);
     }
 
-    async assignDevice(dto: CreateUserDeviceDto): Promise<UserDevice> {
+    async assignDevice(dto: CreateUserDeviceDto): Promise<UserDevice | null> {
         await this.deviceRepository.getById(dto.deviceId);
 
         const isAvailable = await this.userDeviceRepository.checkAvailability(dto.deviceId, dto.ownerStartDate, dto.ownerEndDate);
@@ -28,10 +28,10 @@ export class UserDeviceService extends BaseService<UserDevice> {
         }
     }
 
-    async terminateCurrentAssignment(deviceId: number): Promise<UserDevice | null> {
+    async terminateCurrentAssignment(deviceId: number, endDate?: Date): Promise<UserDevice | null> {
         const active = await this.userDeviceRepository.findActiveAssignment(deviceId);
         if (!active) throw new NotFoundException(`No assignment for ${deviceId}`);
         
-        return this.userDeviceRepository.closeAssignment(active.id, new Date());
+        return this.userDeviceRepository.closeAssignment(active.userId, deviceId, endDate || new Date());
     }
 }

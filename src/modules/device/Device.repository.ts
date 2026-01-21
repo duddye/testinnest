@@ -12,15 +12,4 @@ export class DeviceRepository extends BaseRepository<Device> {
         super(deviceModel);
     }
 
-    async getByName(name: string): Promise<Device[]> {
-        return this.deviceModel.findAll({where: {name: name}})
-    }
-
-    async getByType(type: string): Promise<Device[]> {
-        return this.deviceModel.findAll({where: {type: type}})
-    }
-
-    async getBySerialNumber(serialNumber: string): Promise<Device | null> {
-        return this.deviceModel.findOne({where: {serialNumber: serialNumber}});
-    }
 }
