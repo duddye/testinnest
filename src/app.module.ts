@@ -11,9 +11,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UserDeviceModule } from './modules/user-device/UserDevice.module';
+import { AuthModule } from './common/auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

@@ -5,7 +5,10 @@ import { UpdateUserCredDto } from "./user-dto/UpdateUserCredDto";
 import { UpdateUserDto } from "./user-dto/UpdateUserDto";
 import { BaseController } from "src/common/base/base.controller";
 import { User } from "./User";
+import { UseGuards } from "@nestjs/common";
+import { JoseAuthGuard } from "src/common/auth/jose-auth.guard";
 
+@UseGuards(JoseAuthGuard)
 @Controller('users')
 export class UserController extends BaseController<User, CreateUserDto, UpdateUserDto> {    
     constructor(private readonly userService: UserService) {
