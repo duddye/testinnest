@@ -49,4 +49,8 @@ export class DeviceService extends BaseService<Device> {
         }
     }
     
+    async handleDeviceAssigned(data: any): Promise<void> {
+        console.log("Handling device assigned event with data:", data);
+    
+    }
 }
